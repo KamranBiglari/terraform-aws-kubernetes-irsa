@@ -40,6 +40,9 @@
 
 ## Overview
 
+![Kubernetes IRSA](infographic.png)
+
+
 This module solves a specific problem: **how to enable Kubernetes pods on non-EKS clusters (Talos, kubeadm, k3s, etc.) to securely access AWS services using IAM roles**, without embedding long-lived credentials.
 
 It creates the full OIDC discovery infrastructure required for AWS STS to validate Kubernetes service account tokens. This includes an S3 bucket for hosting OIDC discovery documents, a CloudFront distribution with a custom domain and TLS certificate, an IAM OIDC provider, and an optional Pod Identity Webhook deployment that automatically injects AWS credential environment variables into annotated pods.
@@ -516,7 +519,7 @@ Contributions are welcome! Please:
 
 ## License
 
-This module is licensed under the [Apache License 2.0](https://github.com/KamranBiglari/terraform-aws-kubernetes-irsa/blob/main/LICENSE).
+This module is licensed under the [MIT License](https://github.com/KamranBiglari/terraform-aws-kubernetes-irsa/blob/main/LICENSE).
 
 ---
 
