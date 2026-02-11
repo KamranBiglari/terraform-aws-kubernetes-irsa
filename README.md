@@ -40,7 +40,7 @@
 
 ## Overview
 
-![Kubernetes IRSA](infographic.png)
+![Kubernetes IRSA](https://github.com/KamranBiglari/terraform-aws-kubernetes-irsa/raw/main/infographic.png)
 
 
 This module solves a specific problem: **how to enable Kubernetes pods on non-EKS clusters (Talos, kubeadm, k3s, etc.) to securely access AWS services using IAM roles**, without embedding long-lived credentials.
