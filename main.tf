@@ -8,6 +8,25 @@ locals {
   issuer_url  = "https://${var.oidc_domain}"
   bucket_name = "${var.name}-oidc-discovery-${var.environment}-s3"
   jwks_proper = data.external.cluster_jwks.result.jwks
+
+  index_html = <<-EOT
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="robots" content="noindex">
+      <title>OIDC Discovery — ${var.name}-${var.environment}</title>
+    </head>
+    <body>
+      <h1>OIDC Discovery Endpoint</h1>
+      <p>This is the IRSA OIDC discovery endpoint for <code>${var.name}-${var.environment}</code>.</p>
+      <ul>
+        <li><a href="/.well-known/openid-configuration">/.well-known/openid-configuration</a></li>
+        <li><a href="/keys.json">/keys.json</a></li>
+      </ul>
+    </body>
+    </html>
+  EOT
 }
 
 # ==============================
@@ -127,7 +146,7 @@ resource "aws_acm_certificate_validation" "oidc" {
 resource "aws_cloudfront_distribution" "oidc" {
   enabled             = true
   comment             = "OIDC Discovery for ${var.name}-${var.environment}"
-  default_root_object = ""
+  default_root_object = "index.html"
   price_class         = var.cloudfront_price_class
   aliases             = [var.oidc_domain]
 
@@ -250,6 +269,15 @@ resource "aws_s3_object" "jwks" {
   content      = local.jwks_proper
 
   etag = md5(local.jwks_proper)
+}
+
+resource "aws_s3_object" "index" {
+  bucket       = aws_s3_bucket.oidc_discovery.id
+  key          = "index.html"
+  content_type = "text/html"
+  content      = local.index_html
+
+  etag = md5(local.index_html)
 }
 
 # ==============================
